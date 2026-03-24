@@ -1120,6 +1120,81 @@
       scheduleQuizMainHeightLock();
     });
 
+    const quizContactForm = quizCard.querySelector("#quiz-contact-form");
+    const quizContactSubmit = quizCard.querySelector("#quiz-contact-submit");
+    const quizContactNameInput = quizCard.querySelector("#quiz-contact-name");
+    const quizContactEmailInput = quizCard.querySelector("#quiz-contact-email");
+    const quizContactNameError = quizCard.querySelector("#quiz-contact-name-error");
+    const quizContactEmailError = quizCard.querySelector("#quiz-contact-email-error");
+    const quizContactSuccess = quizCard.querySelector("#quiz-contact-success");
+
+    if (quizContactForm) {
+      const validateQuizContactForm = () => {
+        let valid = true;
+        const nameVal = (quizContactNameInput?.value || "").trim().replace(/\s+/g, " ");
+        const emailVal = (quizContactEmailInput?.value || "").trim().toLowerCase();
+
+        if (quizContactNameInput && quizContactNameError) {
+          const nameOk = nameVal.length >= 2 && nameVal.length <= 80;
+          quizContactNameError.classList.toggle("is-hidden", nameOk);
+          quizContactNameInput.classList.toggle("is-invalid", !nameOk);
+          if (!nameOk) valid = false;
+        }
+
+        if (quizContactEmailInput && quizContactEmailError) {
+          const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(emailVal) && emailVal.length <= 254;
+          quizContactEmailError.classList.toggle("is-hidden", emailOk);
+          quizContactEmailInput.classList.toggle("is-invalid", !emailOk);
+          if (!emailOk) valid = false;
+        }
+
+        return valid;
+      };
+
+      quizContactForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        if (quizContactForm.dataset.submitted) return;
+        if (!validateQuizContactForm()) return;
+
+        const name = (quizContactNameInput?.value || "").trim().replace(/\s+/g, " ");
+        const email = (quizContactEmailInput?.value || "").trim().toLowerCase();
+
+        if (quizContactSubmit) {
+          quizContactSubmit.disabled = true;
+          quizContactSubmit.textContent = "Отправляем…";
+        }
+
+        try {
+          const res = await fetch("/api/quiz-contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, email }),
+          });
+          const data = await res.json().catch(() => ({}));
+
+          if (res.ok && data.success) {
+            quizContactForm.dataset.submitted = "1";
+            quizContactForm.querySelectorAll("input, button").forEach((el) => (el.disabled = true));
+            if (quizContactSuccess) quizContactSuccess.classList.remove("is-hidden");
+          } else {
+            if (quizContactSubmit) {
+              quizContactSubmit.disabled = false;
+              quizContactSubmit.textContent = "Участвовать в розыгрыше";
+            }
+            if (quizContactEmailError) {
+              quizContactEmailError.textContent = data.message || "Ошибка. Попробуйте позже.";
+              quizContactEmailError.classList.remove("is-hidden");
+            }
+          }
+        } catch {
+          if (quizContactSubmit) {
+            quizContactSubmit.disabled = false;
+            quizContactSubmit.textContent = "Участвовать в розыгрыше";
+          }
+        }
+      });
+    }
+
     initResultLockLottie();
     showQuestionStep();
   };

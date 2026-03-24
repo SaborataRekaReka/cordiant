@@ -600,6 +600,34 @@ app.post("/api/request-promocode", rateLimitMiddleware, async (req, res) => {
   }
 });
 
+app.post("/api/quiz-contact", rateLimitMiddleware, async (req, res) => {
+  const name = normalizeName(req.body?.name);
+  const email = normalizeEmail(req.body?.email);
+  const ip = getClientIp(req);
+  const userAgent = String(req.headers["user-agent"] || "");
+
+  if (!isValidName(name) || !isValidEmail(email)) {
+    return res.status(400).json({
+      success: false,
+      message: "Проверьте корректность введенных данных.",
+      code: "VALIDATION_ERROR",
+    });
+  }
+
+  await safeAppendLog(
+    buildLogRecord({ name, email, enteredWord: "QUIZ_CONTACT", ip, userAgent }, {
+      result: "quiz_contact",
+      error_message: "",
+    })
+  );
+
+  return res.status(200).json({
+    success: true,
+    message: "Данные приняты.",
+    code: "QUIZ_CONTACT_SAVED",
+  });
+});
+
 app.get("/public", (_req, res) => {
   res.redirect(301, "/");
 });

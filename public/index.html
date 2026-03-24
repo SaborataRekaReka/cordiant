@@ -209,8 +209,7 @@
           <div class="section-head" data-reveal>
             <h2>Квиз</h2>
             <p>
-              Примите участие в квизе, чтобы получить промокод на повышенный кешбэк 15% за покупку комплекта летних
-              шин Cordiant.
+              Ответьте на вопросы и проверьте, насколько хорошо вы знаете ключевые технологии и модели линейки. Среди участников, правильно ответивших на максимальное число вопросов, будут разыграны классные беспроводные наушники.
             </p>
           </div>
 
@@ -296,7 +295,23 @@
                   </p>
                   <p class="quiz-result__meta">Неверных ответов: <strong><span data-quiz-wrong>0</span></strong></p>
                   <p class="quiz-result__summary" data-quiz-summary>Ответьте на вопросы, чтобы получить персональный результат.</p>
-                  <p class="quiz-result__code">Кодовое слово: <strong>SUMMER</strong></p>
+                  <div class="quiz-result__contact" data-quiz-contact-block>
+                    <p class="quiz-result__contact-lead">Спасибо за участие в квизе! Укажите, пожалуйста, свое ФИО и электронный адрес, если вы хотите претендовать на приз.</p>
+                    <form class="quiz-contact-form" id="quiz-contact-form" novalidate>
+                      <div class="form-group">
+                        <label for="quiz-contact-name">ФИО</label>
+                        <input class="form-input" type="text" id="quiz-contact-name" name="name" autocomplete="name" placeholder="Иванов Иван Иванович" maxlength="80">
+                        <span class="form-error is-hidden" id="quiz-contact-name-error">Укажите ФИО (от 2 до 80 символов)</span>
+                      </div>
+                      <div class="form-group">
+                        <label for="quiz-contact-email">Электронный адрес</label>
+                        <input class="form-input" type="email" id="quiz-contact-email" name="email" autocomplete="email" placeholder="ivan@example.com" maxlength="254">
+                        <span class="form-error is-hidden" id="quiz-contact-email-error">Укажите корректный e-mail</span>
+                      </div>
+                      <button class="btn btn-primary" type="submit" id="quiz-contact-submit">Участвовать в розыгрыше</button>
+                      <p class="quiz-contact-success is-hidden" id="quiz-contact-success">Ваши данные приняты. Удачи в розыгрыше!</p>
+                    </form>
+                  </div>
                 </section>
 
                 <nav class="quiz-pagination" aria-label="Список вопросов квиза">
