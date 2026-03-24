@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node server/server.js",
     "dev": "node --watch server/server.js",
-    "test": "echo \"No tests configured\""
+    "test": "echo \"No tests configured\"",
+    "remove-bg:presents": "node scripts/remove-presents-backgrounds.mjs"
   },
   "keywords": [],
   "author": "",
