@@ -289,27 +289,27 @@
 
                 <section class="quiz-result" data-quiz-result hidden>
                   <p class="quiz-result__eyebrow">Результат квиза</p>
-                  <h4 class="quiz-result__title">Ваш результат: <span data-quiz-result-percent>0%</span></h4>
+                  <h4 class="quiz-result__title">Ваш результат: <span class="quiz-result__percent" data-quiz-result-percent>0%</span></h4>
                   <p class="quiz-result__meta">
-                    Верных ответов: <strong><span data-quiz-correct>0</span> из <span data-quiz-total>8</span></strong>
+                    <span class="quiz-result__stat">✓ <strong><span data-quiz-correct>0</span> из <span data-quiz-total>8</span></strong></span>
+                    <span class="quiz-result__stat quiz-result__stat--wrong">✕ <strong><span data-quiz-wrong>0</span></strong></span>
                   </p>
-                  <p class="quiz-result__meta">Неверных ответов: <strong><span data-quiz-wrong>0</span></strong></p>
                   <p class="quiz-result__summary" data-quiz-summary>Ответьте на вопросы, чтобы получить персональный результат.</p>
                   <div class="quiz-result__contact" data-quiz-contact-block>
-                    <p class="quiz-result__contact-lead">Спасибо за участие в квизе! Укажите, пожалуйста, свое ФИО и электронный адрес, если вы хотите претендовать на приз.</p>
+                    <p class="quiz-result__contact-lead">Укажите ФИО и e-mail, чтобы участвовать в розыгрыше призов</p>
                     <form class="quiz-contact-form" id="quiz-contact-form" novalidate>
-                      <div class="form-group">
-                        <label for="quiz-contact-name">ФИО</label>
-                        <input class="form-input" type="text" id="quiz-contact-name" name="name" autocomplete="name" placeholder="Иванов Иван Иванович" maxlength="80">
-                        <span class="form-error is-hidden" id="quiz-contact-name-error">Укажите ФИО (от 2 до 80 символов)</span>
+                      <div class="quiz-contact-form__row">
+                        <div class="form-group">
+                          <input class="form-input" type="text" id="quiz-contact-name" name="name" autocomplete="name" placeholder="ФИО" maxlength="80" aria-label="ФИО">
+                          <span class="form-error is-hidden" id="quiz-contact-name-error">Укажите ФИО (от 2 до 80 символов)</span>
+                        </div>
+                        <div class="form-group">
+                          <input class="form-input" type="email" id="quiz-contact-email" name="email" autocomplete="email" placeholder="E-mail" maxlength="254" aria-label="Электронный адрес">
+                          <span class="form-error is-hidden" id="quiz-contact-email-error">Укажите корректный e-mail</span>
+                        </div>
+                        <button class="btn quiz-contact-form__btn" type="submit" id="quiz-contact-submit">Участвовать</button>
                       </div>
-                      <div class="form-group">
-                        <label for="quiz-contact-email">Электронный адрес</label>
-                        <input class="form-input" type="email" id="quiz-contact-email" name="email" autocomplete="email" placeholder="ivan@example.com" maxlength="254">
-                        <span class="form-error is-hidden" id="quiz-contact-email-error">Укажите корректный e-mail</span>
-                      </div>
-                      <button class="btn btn-primary" type="submit" id="quiz-contact-submit">Участвовать в розыгрыше</button>
-                      <p class="quiz-contact-success is-hidden" id="quiz-contact-success">Ваши данные приняты. Удачи в розыгрыше!</p>
+                      <p class="quiz-contact-success is-hidden" id="quiz-contact-success">✓ Ваши данные приняты. Удачи в розыгрыше!</p>
                     </form>
                   </div>
                 </section>
