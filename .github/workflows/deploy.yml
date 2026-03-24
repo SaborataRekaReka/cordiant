@@ -1,0 +1,54 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy files via rsync
+        uses: burnett01/rsync-deployments@7.0.1
+        with:
+          # Exclude secrets, runtime storage, git artifacts, and temp scripts
+          switches: >-
+            -avzr
+            --exclude='.git'
+            --exclude='node_modules'
+            --exclude='storage'
+            --exclude='config/.env'
+            --exclude='ssh'
+            --exclude='_explore_server.py'
+            --exclude='*.log'
+          path: ./
+          remote_path: /var/www/cordiant.autogoda.ru/data/
+          remote_host: 146.255.194.214
+          remote_user: test2
+          remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Install dependencies & restart app
+        uses: appleboy/ssh-action@v1
+        with:
+          host: 146.255.194.214
+          username: test2
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            export PATH=/home/bitrix/.local/node-v16.20.2-linux-x64/bin:$PATH
+            cd /var/www/cordiant.autogoda.ru/data
+
+            echo "==> Installing dependencies..."
+            npm install --production --no-audit --no-fund
+
+            echo "==> Restarting app (watchdog will bring it back)..."
+            pkill -f 'server/server.js' || true
+            sleep 3
+
+            if pgrep -f 'server/server.js' > /dev/null; then
+              echo "App is running OK"
+            else
+              echo "WARNING: process not running yet, watchdog should restart shortly"
+            fi

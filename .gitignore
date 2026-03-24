@@ -1,0 +1,30 @@
+node_modules/
+
+# Runtime secrets
+.env
+config/.env
+ssh
+
+# Runtime storage
+storage/promocodes.json
+storage/requests.csv
+storage/*.lock
+storage/*.tmp
+
+# Logs
+npm-debug.log*
+
+# Helpers
+_explore_server.py
+
+# Exported request data (may contain PII)
+**/requests-*.csv
+
+# Runtime storage
+storage/promocodes.json
+storage/requests.csv
+storage/*.lock
+storage/*.tmp
+
+# Logs
+npm-debug.log*

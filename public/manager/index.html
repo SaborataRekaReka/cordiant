@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cordiant | Менеджерский дашборд</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="shortcut icon" href="https://cordiant.ru/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/manager/manager.js" defer></script>
+  </head>
+  <body class="manager-page">
+    <header class="site-header manager-header is-sticky" data-header>
+      <div class="container header__inner">
+        <a class="brand" href="/" aria-label="Cordiant">
+          <img src="/assets/icons/logo-brand.svg" alt="Логотип Cordiant" width="168" height="34">
+        </a>
+        <div class="manager-header__actions">
+          <a class="btn btn-secondary" href="/">На лендинг</a>
+          <button class="btn btn-accent-green-1 is-hidden" id="manager-logout" type="button">Выйти</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="manager-main">
+      <section class="manager-hero">
+        <div class="container manager-hero__inner">
+          <p class="eyebrow">Manager only</p>
+          <h1>Дашборд промокодов и отправок</h1>
+          <p class="manager-hero__lead">
+            Мониторинг остатков промокодов, успешных выдач и истории отправок по e-mail.
+          </p>
+        </div>
+      </section>
+
+      <section class="section manager-section">
+        <div class="container manager-layout">
+          <article class="manager-card manager-login" id="manager-login-card">
+            <h2>Вход для менеджера</h2>
+            <p>Введите пароль для доступа к отчетам.</p>
+            <form id="manager-login-form" novalidate>
+              <label class="code-field" for="manager-password">
+                <span>Пароль</span>
+                <input id="manager-password" name="password" type="password" autocomplete="current-password" required>
+              </label>
+              <p class="code-field__error is-hidden" id="manager-login-error">Неверный пароль.</p>
+              <button class="btn btn-primary btn-block" id="manager-login-submit" type="submit">Войти</button>
+            </form>
+          </article>
+
+          <section class="manager-dashboard is-hidden" id="manager-dashboard">
+
+
+            <div class="manager-kpis" id="manager-kpis">
+              <article class="manager-kpi">
+                <p>Всего промокодов</p>
+                <strong id="kpi-total-promocodes">0</strong>
+              </article>
+
+              <article class="manager-kpi manager-kpi--with-action">
+                <div class="manager-kpi__head">
+                  <p>Промокодов осталось</p>
+                  <button class="manager-kpi__action" id="manager-open-add-promocodes" type="button" title="Добавить промокоды">
+                    +
+                  </button>
+                </div>
+                <strong id="kpi-remaining-promocodes">0</strong>
+              </article>
+
+              <article class="manager-kpi">
+                <p>Выдано</p>
+                <strong id="kpi-sent-promocodes">0</strong>
+              </article>
+              <article class="manager-kpi">
+                <p>Всего запросов</p>
+                <strong id="kpi-total-requests">0</strong>
+              </article>
+              <article class="manager-kpi">
+                <p>Ошибок</p>
+                <strong id="kpi-error-requests">0</strong>
+              </article>
+              <article class="manager-kpi">
+                <p>Неверное слово</p>
+                <strong id="kpi-invalid-word">0</strong>
+              </article>
+              <article class="manager-kpi">
+                <p>Ошибки почты</p>
+                <strong id="kpi-mail-failed">0</strong>
+              </article>
+              <article class="manager-kpi">
+                <p>Коды закончились</p>
+                <strong id="kpi-no-promocodes">0</strong>
+              </article>
+            </div>
+            <div class="manager-toolbar">
+              <button class="btn btn-primary" id="manager-refresh" type="button">Обновить данные</button>
+              <button class="btn btn-secondary" id="manager-download-csv" type="button">Скачать CSV</button>
+              <label class="manager-search">
+                <span class="sr-only">Поиск по таблице</span>
+                <input id="manager-search-input" type="search" placeholder="Поиск: имя, e-mail, код, статус">
+              </label>
+              <span class="manager-updated" id="manager-updated-at">Не обновлялось</span>
+            </div>
+            <article class="manager-card manager-table-card">
+              <div class="manager-table-card__head">
+                <h2>История отправок</h2>
+                <span id="manager-rows-count">0 записей</span>
+              </div>
+              <div class="manager-table-wrap">
+                <table class="manager-table" id="manager-requests-table">
+                  <thead>
+                    <tr>
+                      <th>Дата</th>
+                      <th>Имя</th>
+                      <th>Email</th>
+                      <th>Слово</th>
+                      <th>Результат</th>
+                      <th>Промокод</th>
+                      <th>IP</th>
+                      <th class="manager-col-error">Ошибка</th>
+                    </tr>
+                  </thead>
+                  <tbody id="manager-requests-body">
+                    <tr>
+                      <td colspan="8">Данных пока нет.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </article>
+
+            <article class="manager-card manager-emails-card">
+              <div class="manager-table-card__head">
+                <h2>Письма</h2>
+                <span id="manager-emails-updated">Не обновлялось</span>
+              </div>
+              <p class="manager-emails-hint">
+                Редактирование HTML-шаблонов писем. В шаблоне успешного письма обязательно оставьте `[promocode]`.
+              </p>
+              <form class="manager-emails-form" id="manager-emails-form" novalidate>
+                <div class="manager-emails-grid">
+                  <label class="manager-email-field" for="manager-email-success-template">
+                    <span>Успешная отправка (<strong id="manager-email-success-subject"></strong>)</span>
+                    <textarea
+                      id="manager-email-success-template"
+                      rows="12"
+                      placeholder="Шаблон письма для успешной отправки"
+                    ></textarea>
+                  </label>
+                  <label class="manager-email-field" for="manager-email-error-template">
+                    <span>Неверное кодовое слово (<strong id="manager-email-error-subject"></strong>)</span>
+                    <textarea
+                      id="manager-email-error-template"
+                      rows="12"
+                      placeholder="Шаблон письма для неверного кодового слова"
+                    ></textarea>
+                  </label>
+                </div>
+                <p class="code-field__error is-hidden" id="manager-emails-error">Не удалось сохранить шаблоны писем.</p>
+                <p class="manager-modal__success is-hidden" id="manager-emails-success">Шаблоны писем сохранены.</p>
+                <div class="manager-emails-actions">
+                  <button class="btn btn-primary" id="manager-emails-submit" type="submit">Сохранить письма</button>
+                </div>
+              </form>
+            </article>
+
+                        <article class="manager-card manager-quiz-card">
+              <div class="manager-table-card__head">
+                <h2>Квиз</h2>
+                <div class="manager-quiz-head-actions">
+                  <button class="btn btn-secondary" id="manager-quiz-reload" type="button">Перезагрузить из API</button>
+                  <span id="manager-quiz-updated">Не обновлялось</span>
+                </div>
+              </div>
+              <p class="manager-emails-hint">
+                Визуальный редактор меняет <code>public/assets/data/quiz-data.json</code>. JSON-режим оставлен для точечной ручной правки.
+              </p>
+              <form class="manager-emails-form manager-quiz-form" id="manager-quiz-form" novalidate>
+                <div class="manager-quiz-toolbar">
+                  <div class="manager-quiz-modes" role="tablist" aria-label="Режим редактора квиза">
+                    <button
+                      class="manager-quiz-mode is-active"
+                      id="manager-quiz-mode-visual"
+                      type="button"
+                      role="tab"
+                      aria-selected="true"
+                    >
+                      Визуально
+                    </button>
+                    <button
+                      class="manager-quiz-mode"
+                      id="manager-quiz-mode-json"
+                      type="button"
+                      role="tab"
+                      aria-selected="false"
+                    >
+                      JSON
+                    </button>
+                  </div>
+                </div>
+
+                <div class="manager-quiz-body">
+                  <section class="manager-quiz-panel" id="manager-quiz-visual">
+                    <div class="manager-quiz-global">
+                      <label class="manager-email-field" for="manager-quiz-code-word">
+                        <span>Кодовое слово</span>
+                        <input id="manager-quiz-code-word" type="text" placeholder="SUMMER" />
+                      </label>
+
+                      <label class="manager-email-field" for="manager-quiz-label-correct">
+                        <span>Метка верного ответа</span>
+                        <input id="manager-quiz-label-correct" type="text" />
+                      </label>
+
+                      <label class="manager-email-field" for="manager-quiz-label-wrong">
+                        <span>Метка неверного ответа</span>
+                        <input id="manager-quiz-label-wrong" type="text" />
+                      </label>
+
+                      <label class="manager-email-field" for="manager-quiz-summary-high">
+                        <span>Итог для высокого результата</span>
+                        <textarea id="manager-quiz-summary-high" rows="3"></textarea>
+                      </label>
+
+                      <label class="manager-email-field" for="manager-quiz-summary-medium">
+                        <span>Итог для среднего результата</span>
+                        <textarea id="manager-quiz-summary-medium" rows="3"></textarea>
+                      </label>
+
+                      <label class="manager-email-field" for="manager-quiz-summary-low">
+                        <span>Итог для низкого результата</span>
+                        <textarea id="manager-quiz-summary-low" rows="3"></textarea>
+                      </label>
+                    </div>
+
+                    <div class="manager-quiz-questions-head">
+                      <h3>Вопросы</h3>
+                      <button class="btn btn-secondary" id="manager-quiz-add-question" type="button">+ Добавить вопрос</button>
+                    </div>
+                    <div class="manager-quiz-questions" id="manager-quiz-questions"></div>
+                  </section>
+
+                  <section class="manager-quiz-panel is-hidden" id="manager-quiz-json">
+                    <div class="manager-quiz-editor">
+                      <label class="manager-email-field" for="manager-quiz-config">
+                        <span>JSON-конфигурация квиза</span>
+                        <textarea
+                          id="manager-quiz-config"
+                          rows="20"
+                          spellcheck="false"
+                          placeholder="{&#10;  &quot;codeWord&quot;: &quot;SUMMER&quot;,&#10;  ...&#10;}"
+                        ></textarea>
+                      </label>
+                    </div>
+                  </section>
+                </div>
+
+                <p class="code-field__error is-hidden" id="manager-quiz-error">Не удалось сохранить квиз.</p>
+                <p class="manager-modal__success is-hidden" id="manager-quiz-success">Квиз сохранен.</p>
+                <div class="manager-emails-actions">
+                  <button class="btn btn-primary" id="manager-quiz-submit" type="submit">Сохранить квиз</button>
+                </div>
+              </form>
+            </article>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal" id="manager-promocodes-modal" aria-hidden="true" hidden>
+      <div class="modal__dialog manager-modal" role="dialog" aria-modal="true" aria-labelledby="manager-promocodes-title">
+        <button class="icon-btn modal__close" id="manager-promocodes-close" type="button" aria-label="Закрыть окно">x</button>
+        <h2 id="manager-promocodes-title">Добавить промокоды</h2>
+        <p class="modal__intro">Вставьте список промокодов по одному в строке.</p>
+
+        <form id="manager-promocodes-form" novalidate>
+          <label class="code-field" for="manager-promocodes-input">
+            <span>Список промокодов</span>
+            <textarea id="manager-promocodes-input" rows="10" placeholder="CODE-001&#10;CODE-002&#10;CODE-003"></textarea>
+          </label>
+          <p class="code-field__error is-hidden" id="manager-promocodes-error">Не удалось добавить промокоды.</p>
+          <p class="manager-modal__success is-hidden" id="manager-promocodes-success">Промокоды добавлены.</p>
+          <div class="modal__actions">
+            <button class="btn btn-primary" id="manager-promocodes-submit" type="submit">Добавить</button>
+            <button class="btn btn-secondary" id="manager-promocodes-cancel" type="button">Отмена</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
+
+
