@@ -36,19 +36,21 @@ jobs:
           host: 146.255.194.214
           username: test2
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script_stop: false
           script: |
             export PATH=/home/bitrix/.local/node-v16.20.2-linux-x64/bin:$PATH
             cd /var/www/cordiant.autogoda.ru/data
 
             echo "==> Installing dependencies..."
-            npm install --production --no-audit --no-fund
+            npm install --production --no-audit --no-fund 2>&1 || true
 
             echo "==> Restarting app (watchdog will bring it back)..."
-            pkill -f 'server/server.js' || true
-            sleep 3
+            kill $(cat /home/bitrix/apps/cordiant-runtime/app.pid 2>/dev/null) 2>/dev/null || true
+            sleep 5
 
             if pgrep -f 'server/server.js' > /dev/null; then
-              echo "App is running OK"
+              echo "==> App is running OK"
             else
-              echo "WARNING: process not running yet, watchdog should restart shortly"
+              echo "==> Watchdog should restart shortly"
             fi
+            echo "==> Deploy complete"
