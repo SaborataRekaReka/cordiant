@@ -505,18 +505,18 @@
       resultSummaries: {
         high: "Отличный результат. Вы уверенно ориентируетесь в базовых параметрах подбора шин.",
         medium: "Хороший результат. Вы знаете основные принципы, но есть точки для усиления.",
-        low: "Базовый результат. Рекомендуем ещё раз пройти квиз и освежить ключевые правила выбора шин.",
+        low: "Базовый результат. Рекомендуем еще раз пройти квиз и освежить ключевые правила выбора шин.",
       },
       questions: [
         {
-          question: "Что сильнее всего влияет на сцепление шины на мокрой дороге?",
-          paginationTitle: "Что влияет на сцепление на мокрой дороге?",
-          options: ["Глубина и рисунок протектора", "Только диаметр колеса", "Цвет боковины шины", "Количество грузов на диске"],
-          correct: 0,
-          fact: "Рисунок и глубина канавок помогают эффективнее отводить воду из пятна контакта.",
+          question: "Какая модель летних шин Cordiant обеспечивает экономию топлива до 30% по сравнению с предшественником?",
+          paginationTitle: "Какая модель летних шин Cordiant обеспечивает экономию топлива до 30% по сравнению с предшественником?",
+          options: ["Cordiant Gravity", "Cordiant Run Tour", "Cordiant Off Road 2"],
+          correct: 1,
+          fact: "Оптимизированный состав резиновой смеси и облегченный брекерный пакет в модели Cordiant Run Tour способствуют снижению сопротивления качению и экономии топлива до 30% по сравнению с шиной-предшественником.",
           image: {
-            src: "assets/img/hero/16784.jpg",
-            alt: "Изображение вопроса квиза",
+            src: "assets/img/quiz/1.jpg",
+            alt: "Шина Cordiant Run Tour",
           },
         },
       ],
@@ -832,13 +832,19 @@
 
     const renderQuestionVisual = () => {
       if (!(questionVisualImage instanceof HTMLImageElement)) return;
-      const placeholderSrc = "assets/img/hero/16784.jpg";
-      const placeholderAlt = "Заглушка изображения вопроса";
+      const item = quizData[activeIndex];
+      const fallbackSrc = "assets/img/quiz/1.jpg";
+      const imageSrc =
+        typeof item?.image?.src === "string" && item.image.src.trim()
+          ? item.image.src.trim()
+          : fallbackSrc;
+      const imageAlt =
+        typeof item?.image?.alt === "string" && item.image.alt.trim()
+          ? item.image.alt.trim()
+          : "Изображение вопроса квиза";
 
-      if (questionVisualImage.getAttribute("src") !== placeholderSrc) {
-        questionVisualImage.setAttribute("src", placeholderSrc);
-      }
-      questionVisualImage.setAttribute("alt", placeholderAlt);
+      questionVisualImage.setAttribute("src", imageSrc);
+      questionVisualImage.setAttribute("alt", imageAlt);
     };
 
     const renderAnswerOptions = () => {
