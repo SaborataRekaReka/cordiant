@@ -1083,6 +1083,12 @@ input {
   color: #004572;
 }
 
+.step-card__action {
+  position: relative;
+  z-index: 1;
+  justify-self: start;
+}
+
 .quiz-card {
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.3);
@@ -4473,7 +4479,7 @@ body.modal-open {
   }
 
   .steps {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .quiz-layout {
@@ -4538,7 +4544,7 @@ body.modal-open {
   }
 
   .steps {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     position: relative;
   }
 
