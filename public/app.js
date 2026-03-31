@@ -646,9 +646,6 @@
     const quizData = quizConfig.questions;
     const feedbackStatusLabels = quizConfig.labels;
     const resultSummaryTexts = quizConfig.resultSummaries;
-    if (resultCodeWord && quizConfig.codeWord) {
-      resultCodeWord.textContent = quizConfig.codeWord;
-    }
 
     const totalQuestions = Math.min(pageButtons.length, quizData.length);
     if (!totalQuestions) return;
