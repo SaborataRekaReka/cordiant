@@ -1472,6 +1472,10 @@ input {
   margin-top: 8px;
 }
 
+.quiz-result__success a {
+  color: #ffffff;
+}
+
 .quiz-card.is-feedback-step .quiz-options,
 .quiz-card.is-feedback-step .quiz-result {
   display: none;
