@@ -641,6 +641,7 @@ app.get("/rules.html", (_req, res) => {
 });
 
 app.get("/manager", (_req, res) => {
+  res.setHeader("Cache-Control", "no-cache, must-revalidate");
   res.sendFile(path.join(config.publicDir, "manager", "index.html"));
 });
 
@@ -661,10 +662,17 @@ app.get("/public/rules.html", (_req, res) => {
 });
 
 app.get("/rules", (_req, res) => {
+  res.setHeader("Cache-Control", "no-cache, must-revalidate");
   res.sendFile(path.join(config.publicDir, "rules", "index.html"));
 });
 
-app.use(express.static(config.publicDir));
+app.use(express.static(config.publicDir, {
+  setHeaders(res, filePath) {
+    if (filePath.endsWith(".html")) {
+      res.setHeader("Cache-Control", "no-cache, must-revalidate");
+    }
+  },
+}));
 
 app.use("/api", (_req, res) => {
   res.status(404).json({
