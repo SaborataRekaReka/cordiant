@@ -11,6 +11,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Stamp cache-busting version into index.html
+        run: |
+          VERSION=$(date -u +"%Y%m%d-%H%M")
+          sed -i "s|href=\"styles\.css[^\"]*\"|href=\"styles.css?v=${VERSION}\"|g" public/index.html
+          sed -i "s|src=\"app\.js[^\"]*\"|src=\"app.js?v=${VERSION}\"|g" public/index.html
+          sed -i "s|src=\"assets/img/quiz/open-lock-data\.js[^\"]*\"|src=\"assets/img/quiz/open-lock-data.js?v=${VERSION}\"|g" public/index.html
+          echo "Cache version: ${VERSION}"
+
       - name: Deploy files via rsync
         uses: burnett01/rsync-deployments@7.0.1
         with:
