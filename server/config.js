@@ -53,5 +53,4 @@ module.exports = {
     tokenSecret: process.env.MANAGER_DASHBOARD_TOKEN_SECRET || process.env.MANAGER_DASHBOARD_PASSWORD || "",
     sessionTtlMs: toInt(process.env.MANAGER_SESSION_TTL_MS, 8 * 60 * 60 * 1000),
   },
-  quizDownloadToken: process.env.QUIZ_DOWNLOAD_TOKEN || "",
 };

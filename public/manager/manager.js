@@ -10,6 +10,7 @@
   const logoutButton = document.getElementById("manager-logout");
   const refreshButton = document.getElementById("manager-refresh");
   const downloadCsvButton = document.getElementById("manager-download-csv");
+  const downloadQuizCsvButton = document.getElementById("manager-download-quiz-csv");
   const openAddPromocodesButton = document.getElementById("manager-open-add-promocodes");
   const searchInput = document.getElementById("manager-search-input");
   const updatedAtNode = document.getElementById("manager-updated-at");
@@ -132,6 +133,7 @@
 
   const defaultRefreshText = refreshButton.textContent || "Обновить данные";
   const defaultDownloadCsvText = downloadCsvButton.textContent || "Скачать CSV";
+  const defaultDownloadQuizCsvText = downloadQuizCsvButton.textContent || "Скачать результаты квиза";
   const defaultPromocodesSubmitText = promocodesSubmit.textContent || "Добавить";
   const defaultEmailsSubmitText = emailsSubmit.textContent || "Сохранить письма";
   const defaultQuizSubmitText = quizSubmit.textContent || "Сохранить квиз";
@@ -229,6 +231,7 @@
     loginSubmit.disabled = value;
     refreshButton.disabled = value;
     downloadCsvButton.disabled = value;
+    downloadQuizCsvButton.disabled = value;
     openAddPromocodesButton.disabled = value || state.importingPromocodes;
     emailsSubmit.disabled = value || state.savingEmails;
     quizSubmit.disabled = value || state.savingQuiz;
@@ -1201,6 +1204,33 @@
 
   downloadCsvButton.addEventListener("click", () => {
     if (!state.loading) downloadCsv();
+  });
+
+  downloadQuizCsvButton.addEventListener("click", async () => {
+    if (state.loading) return;
+    downloadQuizCsvButton.disabled = true;
+    downloadQuizCsvButton.textContent = "Скачивание...";
+    try {
+      const response = await fetch("/api/manager/quiz-results.csv");
+      if (response.status === 401) { handleUnauthorized(); return; }
+      if (!response.ok) { setLoginError("Не удалось скачать CSV квиза."); return; }
+      const blob = await response.blob();
+      const disposition = response.headers.get("content-disposition");
+      const filename = parseContentDispositionFilename(disposition) || "quiz-results.csv";
+      const blobUrl = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.download = filename;
+      document.body.append(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(blobUrl);
+    } catch (_error) {
+      setLoginError("Не удалось скачать CSV квиза.");
+    } finally {
+      downloadQuizCsvButton.disabled = false;
+      downloadQuizCsvButton.textContent = defaultDownloadQuizCsvText;
+    }
   });
 
   openAddPromocodesButton.addEventListener("click", () => {
