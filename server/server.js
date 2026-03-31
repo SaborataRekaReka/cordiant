@@ -666,6 +666,86 @@ app.get("/rules", (_req, res) => {
   res.sendFile(path.join(config.publicDir, "rules", "index.html"));
 });
 
+const QUIZ_RESULTS_FILE = path.join(config.storageDir, "quiz-results.csv");
+const QUIZ_RESULTS_COLUMNS = [
+  "submitted_at",
+  "full_name",
+  "phone",
+  "email",
+  "correct_answers",
+  "wrong_answers",
+  "total_questions",
+  "accuracy_percent",
+  "remote_ip",
+  "user_agent",
+];
+
+const escapeCsvValue = (value) => {
+  const str = String(value ?? "");
+  if (!/[",\r\n]/.test(str)) return str;
+  return `"${str.replace(/"/g, '""')}"`;
+};
+
+const appendQuizResult = async (entry) => {
+  const fs = require("fs/promises");
+  await fs.mkdir(config.storageDir, { recursive: true });
+  let needsHeader = false;
+  try {
+    await fs.access(QUIZ_RESULTS_FILE);
+  } catch {
+    needsHeader = true;
+  }
+  const line = `${QUIZ_RESULTS_COLUMNS.map((col) => escapeCsvValue(entry[col])).join(",")}\n`;
+  if (needsHeader) {
+    await fs.writeFile(QUIZ_RESULTS_FILE, `${QUIZ_RESULTS_COLUMNS.join(",")}\n${line}`, "utf8");
+  } else {
+    await fs.appendFile(QUIZ_RESULTS_FILE, line, "utf8");
+  }
+};
+
+const normalizeField = (value) => String(value ?? "").trim().replace(/\s+/g, " ");
+const quizEmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+
+app.post("/api/quiz-result", async (req, res) => {
+  const fullName = normalizeField(req.body.fullName);
+  const phone = normalizeField(req.body.phone);
+  const email = normalizeField(req.body.email).toLowerCase();
+
+  if (!fullName || fullName.length < 2 || fullName.length > 120) {
+    return res.status(422).json({ success: false, message: "Укажите ФИО." });
+  }
+  if (!phone || phone.length < 5 || phone.length > 32) {
+    return res.status(422).json({ success: false, message: "Укажите телефон." });
+  }
+  if (!email || !quizEmailPattern.test(email) || email.length > 254) {
+    return res.status(422).json({ success: false, message: "Укажите корректный email." });
+  }
+
+  const correctAnswers = Number.isFinite(Number(req.body.correctAnswers)) ? Number(req.body.correctAnswers) : 0;
+  const wrongAnswers = Number.isFinite(Number(req.body.wrongAnswers)) ? Number(req.body.wrongAnswers) : 0;
+  const totalQuestions = Number.isFinite(Number(req.body.totalQuestions)) ? Number(req.body.totalQuestions) : 0;
+  const resultAccuracy = Number.isFinite(Number(req.body.resultAccuracy)) ? Number(req.body.resultAccuracy) : 0;
+
+  try {
+    await appendQuizResult({
+      submitted_at: new Date().toISOString(),
+      full_name: fullName,
+      phone,
+      email,
+      correct_answers: correctAnswers,
+      wrong_answers: wrongAnswers,
+      total_questions: totalQuestions,
+      accuracy_percent: resultAccuracy,
+      remote_ip: getClientIp(req),
+      user_agent: String(req.headers["user-agent"] || ""),
+    });
+    return res.json({ success: true });
+  } catch (error) {
+    console.error("[quiz-result] Ошибка записи CSV:", error);
+    return res.status(500).json({ success: false, message: "Внутренняя ошибка сервера." });
+  }
+});
+
 app.use(express.static(config.publicDir, {
   setHeaders(res, filePath) {
     if (filePath.endsWith(".html")) {

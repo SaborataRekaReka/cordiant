@@ -491,6 +491,10 @@
     const resultWrong = quizCard.querySelector("[data-quiz-wrong]");
     const resultSummary = quizCard.querySelector("[data-quiz-summary]");
     const resultCodeWord = quizCard.querySelector(".quiz-result__code strong");
+    const resultClaimFormWrap = quizCard.querySelector("[data-quiz-claim-form-wrap]");
+    const resultClaimForm = quizCard.querySelector("[data-quiz-claim-form]");
+    const resultClaimError = quizCard.querySelector("[data-quiz-claim-error]");
+    const resultClaimSuccess = quizCard.querySelector("[data-quiz-claim-success]");
     const progressRing = quizCard.querySelector("[data-quiz-progress]");
     const progressValue = quizCard.querySelector("[data-quiz-progress-value]");
 
@@ -660,6 +664,7 @@
     let isResultStepLocked = true;
     let lockLottieAnimation = null;
     let hasResultUnlockAnimationPlayed = false;
+    let hasResultClaimBeenSubmitted = false;
 
     const lockQuizMainHeight = () => {
       if (!(quizMain instanceof HTMLElement)) return;
@@ -1015,6 +1020,82 @@
       renderPagination();
       scheduleQuizMainHeightLock();
     };
+
+    const syncResultClaimState = () => {
+      if (resultClaimFormWrap instanceof HTMLElement) {
+        resultClaimFormWrap.hidden = hasResultClaimBeenSubmitted;
+      }
+      if (resultClaimError instanceof HTMLElement) {
+        resultClaimError.hidden = true;
+        resultClaimError.textContent = "";
+      }
+      if (resultClaimSuccess instanceof HTMLElement) {
+        resultClaimSuccess.hidden = !hasResultClaimBeenSubmitted;
+      }
+    };
+
+    if (resultClaimForm instanceof HTMLFormElement) {
+      resultClaimForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const submitButton = resultClaimForm.querySelector(".quiz-result__submit");
+        if (submitButton instanceof HTMLButtonElement) {
+          submitButton.disabled = true;
+          submitButton.textContent = "Отправка...";
+        }
+
+        const formData = new FormData(resultClaimForm);
+        const fullName = String(formData.get("fullName") || "").trim();
+        const phone = String(formData.get("phone") || "").trim();
+        const email = String(formData.get("email") || "").trim();
+
+        const correctAnswers = selectedAnswers.reduce((acc, value, index) => {
+          const correct = quizData[index] ? quizData[index].correct : -1;
+          return acc + (value === correct ? 1 : 0);
+        }, 0);
+        const wrongAnswers = totalQuestions - correctAnswers;
+        const resultAccuracy = Math.round((correctAnswers / totalQuestions) * 100);
+
+        try {
+          const response = await fetch("/api/quiz-result", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              fullName,
+              phone,
+              email,
+              correctAnswers,
+              wrongAnswers,
+              totalQuestions,
+              resultAccuracy,
+            }),
+          });
+
+          let payload = null;
+          try { payload = await response.json(); } catch { payload = null; }
+
+          if (!response.ok || !payload || payload.success !== true) {
+            throw new Error(payload && payload.message ? payload.message : "Ошибка отправки");
+          }
+
+          hasResultClaimBeenSubmitted = true;
+          syncResultClaimState();
+          resultClaimForm.reset();
+          scheduleQuizMainHeightLock();
+        } catch (error) {
+          console.warn("[quiz] Не удалось сохранить результат формы.", error);
+          if (resultClaimError instanceof HTMLElement) {
+            resultClaimError.textContent = "Не удалось отправить данные. Попробуйте ещё раз.";
+            resultClaimError.hidden = false;
+          }
+        } finally {
+          if (submitButton instanceof HTMLButtonElement) {
+            submitButton.disabled = false;
+            submitButton.textContent = "Отправить";
+          }
+        }
+      });
+    }
 
     pageButtons.forEach((button, index) => {
       if (index >= totalQuestions) {
