@@ -214,6 +214,31 @@ app.get("/api/manager/requests.csv", requireManagerAuth, async (_req, res) => {
   }
 });
 
+app.get("/api/manager/quiz-results.csv", requireManagerAuth, async (_req, res) => {
+  try {
+    const fs = require("fs/promises");
+    let csv = "";
+    try {
+      csv = await fs.readFile(QUIZ_RESULTS_FILE, "utf8");
+    } catch (err) {
+      if (err.code === "ENOENT") {
+        csv = `${QUIZ_RESULTS_COLUMNS.join(",")}\n`;
+      } else {
+        throw err;
+      }
+    }
+    const now = new Date();
+    const stamp = `${now.getFullYear()}${twoDigits(now.getMonth() + 1)}${twoDigits(now.getDate())}-${twoDigits(
+      now.getHours()
+    )}${twoDigits(now.getMinutes())}${twoDigits(now.getSeconds())}`;
+    res.setHeader("Content-Type", "text/csv; charset=utf-8");
+    res.setHeader("Content-Disposition", `attachment; filename="quiz-results-${stamp}.csv"`);
+    return res.status(200).send(csv);
+  } catch (error) {
+    return res.status(500).json({ success: false, message: "Failed to export CSV." });
+  }
+});
+
 app.post("/api/manager/promocodes/import", requireManagerAuth, async (req, res) => {
   const rawCodes = String(req.body?.codesText ?? "");
   const lines = rawCodes
