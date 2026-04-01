@@ -4,11 +4,11 @@
 
 <p>Не расстраивайтесь! Попробуйте ввести кодовое слово снова, количество попыток ввода не ограничено!</p>
 
-<p>Кодовое слово Вы можете получить, пройдя квиз на сайте: <a href="https://cordiant.autogoda.ru/?erid=2W5zFJ6FJiu">https://cordiant.autogoda.ru/</a></p>
+<p>Кодовое слово Вы можете получить, пройдя квиз на сайте: <a href="https://cordiant.autogoda.ru/">https://cordiant.autogoda.ru/</a></p>
 
 <p>Введя верное кодовое слово, Вы получите специальный промокод на повышенный кешбэк при покупке летних шин Cordiant 16, 17 и 18 дюймов, а также сможете претендовать на крутые призы!</p>
 
-<p>Подробности и правила акции на сайте: <a href="https://cordiant.autogoda.ru/?erid=2W5zFJ6FJiu">https://cordiant.autogoda.ru/</a></p>
+<p>Подробности и правила акции на сайте: <a href="https://cordiant.autogoda.ru/">https://cordiant.autogoda.ru/</a></p>
 
 <p>С уважением, </p>
 <p>Служба поддержки Акции</p>
