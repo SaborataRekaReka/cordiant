@@ -164,7 +164,9 @@ section {
 
 .hero-static img {
   width: 100%;
+  max-width: 1920px;
   height: auto;
+  margin: 0 auto;
 }
 
 .hero--immersive {
@@ -3495,6 +3497,10 @@ input {
   padding: 10px 12px;
   display: inline-block;
   font-weight: 700;
+}
+
+.tire-card .sticker_hit--teal {
+  background: var(--brand-2);
 }
 
 .tire-card .model_big {
