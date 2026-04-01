@@ -1104,7 +1104,7 @@ input {
   box-shadow: 0 20px 44px rgba(0, 16, 29, 0.25);
   display: grid;
   gap: 18px;
-  --quiz-question-lines: 2;
+  --quiz-question-lines: 3;
   --quiz-answer-lines: 2;
   --quiz-option-height: 72px;
   --quiz-main-min-height: 460px;
