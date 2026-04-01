@@ -1093,6 +1093,8 @@ input {
   position: relative;
   z-index: 1;
   justify-self: start;
+  align-self: end;
+  grid-row: 5;
 }
 
 .quiz-card {
@@ -4532,6 +4534,8 @@ body.modal-open {
 
   .steps {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: auto;
+    align-items: start;
     position: relative;
   }
 
@@ -4548,6 +4552,9 @@ body.modal-open {
 
   .step-card {
     z-index: 1;
+    display: grid;
+    grid-template-rows: subgrid;
+    grid-row: span 5;
   }
 
   .cookie-banner {
