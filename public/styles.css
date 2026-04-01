@@ -252,6 +252,10 @@ section {
   z-index: 1;
 }
 
+#quiz .section-head {
+  max-width: 100%;
+}
+
 .section-head {
   max-width: 740px;
   display: grid;
