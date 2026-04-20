@@ -1044,10 +1044,31 @@
           submitButton.textContent = "Отправка...";
         }
 
+        if (resultClaimError instanceof HTMLElement) {
+          resultClaimError.hidden = true;
+          resultClaimError.textContent = "";
+        }
+
         const formData = new FormData(resultClaimForm);
         const fullName = String(formData.get("fullName") || "").trim();
         const phone = String(formData.get("phone") || "").trim();
         const email = String(formData.get("email") || "").trim();
+        const consentInputs = Array.from(
+          resultClaimForm.querySelectorAll('input[name^="quizConsent"]')
+        );
+        const hasAllConsents = consentInputs.length > 0 && consentInputs.every((input) => input.checked);
+
+        if (!fullName || !phone || !email || !hasAllConsents) {
+          if (resultClaimError instanceof HTMLElement) {
+            resultClaimError.textContent = "Заполните поля формы и подтвердите все согласия.";
+            resultClaimError.hidden = false;
+          }
+          if (submitButton instanceof HTMLButtonElement) {
+            submitButton.disabled = false;
+            submitButton.textContent = "ЗАРЕГИСТРИРОВАТЬСЯ";
+          }
+          return;
+        }
 
         const correctAnswers = selectedAnswers.reduce((acc, value, index) => {
           const correct = quizData[index] ? quizData[index].correct : -1;
@@ -1091,7 +1112,7 @@
         } finally {
           if (submitButton instanceof HTMLButtonElement) {
             submitButton.disabled = false;
-            submitButton.textContent = "Отправить";
+            submitButton.textContent = "ЗАРЕГИСТРИРОВАТЬСЯ";
           }
         }
       });
@@ -1401,7 +1422,9 @@
     const contactForm = document.getElementById("contact-form");
     const nameInput = document.getElementById("contact-name");
     const emailInput = document.getElementById("contact-email");
-    const consentInput = document.getElementById("contact-consent");
+    const consentDocsInput = document.getElementById("contact-consent-docs");
+    const consentProcessingInput = document.getElementById("contact-consent-processing");
+    const consentEmailInput = document.getElementById("contact-consent-email");
     const contactSubmit = document.getElementById("contact-submit");
     const nameError = document.getElementById("contact-name-error");
     const emailError = document.getElementById("contact-email-error");
@@ -1420,7 +1443,9 @@
       !contactForm ||
       !nameInput ||
       !emailInput ||
-      !consentInput ||
+      !consentDocsInput ||
+      !consentProcessingInput ||
+      !consentEmailInput ||
       !contactSubmit ||
       !nameError ||
       !emailError
@@ -1433,7 +1458,8 @@
     const codeLengthValue = Number.parseInt(form.dataset.otpLength || "6", 10);
     const codeLength = Number.isFinite(codeLengthValue) ? Math.min(8, Math.max(4, codeLengthValue)) : 6;
     const defaultEmailError = emailError.textContent || "Проверьте формат e-mail.";
-    const defaultContactSubmitText = contactSubmit.textContent || "Отправить промокод";
+    const defaultContactSubmitText = contactSubmit.textContent || "ЗАРЕГИСТРИРОВАТЬСЯ";
+    const contactConsentInputs = [consentDocsInput, consentProcessingInput, consentEmailInput];
     let isSubmitting = false;
     emailError.dataset.defaultText = defaultEmailError;
     contactSubmit.dataset.defaultText = defaultContactSubmitText;
@@ -1515,7 +1541,8 @@
 
     const validateName = () => nameInput.value.trim().length > 1;
     const validateEmail = () => emailPattern.test(emailInput.value.trim());
-    const isContactValid = () => validateName() && validateEmail() && consentInput.checked;
+    const isContactValid = () =>
+      validateName() && validateEmail() && contactConsentInputs.every((input) => input.checked);
 
     const refreshContactState = () => {
       const submitted = contactForm.dataset.submitted === "true";
@@ -1703,7 +1730,9 @@
       });
     });
 
-    consentInput.addEventListener("change", refreshContactState);
+    contactConsentInputs.forEach((input) => {
+      input.addEventListener("change", refreshContactState);
+    });
 
     contactForm.addEventListener("submit", async (event) => {
       event.preventDefault();
@@ -1739,19 +1768,18 @@
   };
 
   const setupCookieUi = () => {
-    const storageKey = "cordiant-cookie-settings";
+    const storageKey = "cordiant-cookie-consent";
     const banner = document.getElementById("cookie-banner");
     const acceptBtn = document.getElementById("cookie-accept");
-    const cookieForm = document.getElementById("cookie-form");
 
-    if (!banner || !acceptBtn || !cookieForm) return;
+    if (!banner || !acceptBtn) return;
 
-    const analytics = cookieForm.querySelector('input[name="analytics"]');
-    const marketing = cookieForm.querySelector('input[name="marketing"]');
-
-    const save = (settings) => {
+    const save = () => {
       try {
-        localStorage.setItem(storageKey, JSON.stringify({ ...settings, essential: true, savedAt: Date.now() }));
+        localStorage.setItem(
+          storageKey,
+          JSON.stringify({ accepted: true, savedAt: Date.now() })
+        );
       } catch (_error) {
         /* ignore write errors */
       }
@@ -1768,27 +1796,12 @@
     };
 
     const existing = read();
-    if (existing) {
+    if (existing && existing.accepted === true) {
       banner.classList.add("is-hidden");
-      if (analytics) analytics.checked = Boolean(existing.analytics);
-      if (marketing) marketing.checked = Boolean(existing.marketing);
     }
 
     acceptBtn.addEventListener("click", () => {
-      if (analytics) analytics.checked = true;
-      if (marketing) marketing.checked = true;
-      save({ analytics: true, marketing: true });
-    });
-
-    cookieForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-
-      save({
-        analytics: Boolean(analytics && analytics.checked),
-        marketing: Boolean(marketing && marketing.checked),
-      });
-
-      closeModal("cookie-modal");
+      save();
     });
   };
 

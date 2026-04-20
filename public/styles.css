@@ -1459,6 +1459,23 @@ input {
   border-color: var(--brand-2);
 }
 
+.quiz-result__check-row {
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.quiz-result__check-row input {
+  accent-color: var(--brand-2);
+  margin-top: 3px;
+}
+
+.quiz-result__check-row a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .quiz-result__submit {
   margin-top: 4px;
   align-self: start;
@@ -4159,11 +4176,16 @@ input {
 
 .code-modal__check-row {
   font-size: 0.92rem;
+  line-height: 1.42;
 }
 
 .code-modal__check-row input {
   accent-color: var(--brand);
   margin-top: 4px;
+}
+
+.code-modal__check-row a {
+  color: var(--brand);
 }
 
 .code-field__error {
