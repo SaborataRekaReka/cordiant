@@ -84,3 +84,29 @@ Manager API (authenticated):
 - `POST /api/manager/emails`
 - `POST /api/manager/promocodes/import`
 - `POST /api/manager/logout`
+
+## Systemd deployment (production)
+
+В репозитории есть готовые файлы для запуска backend как systemd-сервиса:
+
+- `scripts/systemd/cordiant-backend.service` — unit-файл
+- `scripts/systemd/install-systemd.sh` — установка unit в `/etc/systemd/system` и запуск
+
+Быстрый запуск на сервере:
+
+1. Перейдите в каталог проекта.
+2. Выполните:
+   - `sudo bash scripts/systemd/install-systemd.sh`
+
+Проверка:
+
+- `sudo systemctl status cordiant-backend --no-pager`
+- `sudo journalctl -u cordiant-backend -n 200 --no-pager`
+
+Переопределения (через переменные окружения перед запуском скрипта):
+
+- `APP_DIR` (по умолчанию `/var/www/cordiant.autogoda.ru/data`)
+- `APP_USER` и `APP_GROUP` (по умолчанию `bitrix`)
+- `NODE_BIN` (по умолчанию `/home/bitrix/.local/node-v16.20.2-linux-x64/bin/node`)
+- `ENV_PATH` (по умолчанию `$APP_DIR/config/.env`)
+- `STORAGE_DIR` (по умолчанию `$APP_DIR/storage`)

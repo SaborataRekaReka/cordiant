@@ -1,0 +1,21 @@
+[Unit]
+Description=Cordiant backend service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=bitrix
+Group=bitrix
+WorkingDirectory=/var/www/cordiant.autogoda.ru/data
+Environment=NODE_ENV=production
+Environment=CORDIANT_ENV_PATH=/var/www/cordiant.autogoda.ru/data/config/.env
+Environment=STORAGE_DIR=/var/www/cordiant.autogoda.ru/data/storage
+ExecStart=/home/bitrix/.local/node-v16.20.2-linux-x64/bin/node /var/www/cordiant.autogoda.ru/data/server/server.js
+Restart=always
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
