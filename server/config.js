@@ -1,10 +1,27 @@
+const fs = require("fs");
 const path = require("path");
 const dotenv = require("dotenv");
 
 const rootDir = path.resolve(__dirname, "..");
-const envPath = process.env.CORDIANT_ENV_PATH
-  ? path.resolve(process.env.CORDIANT_ENV_PATH)
-  : path.join(rootDir, "config", ".env");
+
+const resolveEnvPath = () => {
+  const explicitPath = String(process.env.CORDIANT_ENV_PATH || process.env.ENV_PATH || "").trim();
+  if (explicitPath) {
+    return path.resolve(explicitPath);
+  }
+
+  const defaultPath = path.join(rootDir, "config", ".env");
+  const fallbackCandidates = [
+    defaultPath,
+    path.join(process.cwd(), "config", ".env"),
+    "/var/www/cordiant.autogoda.ru/data/config/.env",
+  ];
+
+  const existingPath = fallbackCandidates.find((candidate) => fs.existsSync(candidate));
+  return existingPath || defaultPath;
+};
+
+const envPath = resolveEnvPath();
 
 dotenv.config({ path: envPath, quiet: true });
 
@@ -49,8 +66,13 @@ module.exports = {
     fromName: process.env.SMTP_FROM_NAME || "",
   },
   manager: {
-    password: process.env.MANAGER_DASHBOARD_PASSWORD || "",
-    tokenSecret: process.env.MANAGER_DASHBOARD_TOKEN_SECRET || process.env.MANAGER_DASHBOARD_PASSWORD || "",
+    password: process.env.MANAGER_DASHBOARD_PASSWORD || process.env.MANAGER_PASSWORD || "",
+    tokenSecret:
+      process.env.MANAGER_DASHBOARD_TOKEN_SECRET ||
+      process.env.MANAGER_TOKEN_SECRET ||
+      process.env.MANAGER_DASHBOARD_PASSWORD ||
+      process.env.MANAGER_PASSWORD ||
+      "",
     sessionTtlMs: toInt(process.env.MANAGER_SESSION_TTL_MS, 8 * 60 * 60 * 1000),
   },
 };
