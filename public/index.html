@@ -519,6 +519,96 @@
 
         </div>
       </section>
+
+      <section class="section winners-section" id="winners">
+        <div class="container">
+          <div class="section-head winners-section__head" data-reveal>
+            <h2>Призёры акции</h2>
+            <p>Поздравляем победителей. Контактные данные частично скрыты для безопасности.</p>
+          </div>
+
+          <div class="winners-controls" data-reveal>
+            <input id="winners-search" type="search" placeholder="Поиск по имени" autocomplete="off">
+          </div>
+
+          <div class="winners-grid" data-reveal>
+            <article class="winner-card" data-winner-row data-name="данил галицкий">
+              <img class="winner-card__avatar" data-random-avatar alt="Аватар призёра Данил Галицкий" width="56" height="56" loading="lazy" decoding="async">
+              <div class="winner-card__body">
+                <span class="winner-card__badge">Победитель 01</span>
+                <h3>Данил Галицкий</h3>
+                <p class="winner-card__email">dan***@mail.ru</p>
+                <p class="winner-card__prize">Приз: Ноутбук Apple MacBook Air</p>
+              </div>
+            </article>
+
+            <article class="winner-card" data-winner-row data-name="анна лапай">
+              <img class="winner-card__avatar" data-random-avatar alt="Аватар призёра Анна Лапай" width="56" height="56" loading="lazy" decoding="async">
+              <div class="winner-card__body">
+                <span class="winner-card__badge">Победитель 02</span>
+                <h3>Анна Лапай</h3>
+                <p class="winner-card__email">hit***@rambler.ru</p>
+                <p class="winner-card__prize">Приз: Кофемашина Delonghi</p>
+              </div>
+            </article>
+
+            <article class="winner-card" data-winner-row data-name="олеговна елена">
+              <img class="winner-card__avatar" data-random-avatar alt="Аватар призёра Олеговна Елена" width="56" height="56" loading="lazy" decoding="async">
+              <div class="winner-card__body">
+                <span class="winner-card__badge">Победитель 03</span>
+                <h3>Олеговна Елена</h3>
+                <p class="winner-card__email">lai***@mail.ru</p>
+                <p class="winner-card__prize">Приз: Мойка высокого давления Greenworks</p>
+              </div>
+            </article>
+
+            <article class="winner-card" data-winner-row data-name="солдатов андрей">
+              <img class="winner-card__avatar" data-random-avatar alt="Аватар призёра Солдатов Андрей" width="56" height="56" loading="lazy" decoding="async">
+              <div class="winner-card__body">
+                <span class="winner-card__badge">Победитель 04</span>
+                <h3>Солдатов Андрей</h3>
+                <p class="winner-card__email">Sol***@yandex.ru</p>
+                <p class="winner-card__prize">Приз: Блендер Nutribullet</p>
+              </div>
+            </article>
+
+            <article class="winner-card" data-winner-row data-name="михаил москвичев">
+              <img class="winner-card__avatar" data-random-avatar alt="Аватар призёра Михаил Москвичев" width="56" height="56" loading="lazy" decoding="async">
+              <div class="winner-card__body">
+                <span class="winner-card__badge">Победитель 05</span>
+                <h3>Михаил Москвичев</h3>
+                <p class="winner-card__email">m.m***@mail.ru</p>
+                <p class="winner-card__prize">Приз: Видеорегистратор 70mai</p>
+              </div>
+            </article>
+
+            <article class="winner-card" data-winner-row data-name="наталия щелкалина">
+              <img class="winner-card__avatar" data-random-avatar alt="Аватар призёра Наталия Щелкалина" width="56" height="56" loading="lazy" decoding="async">
+              <div class="winner-card__body">
+                <span class="winner-card__badge">Победитель 06</span>
+                <h3>Наталия Щелкалина</h3>
+                <p class="winner-card__email">A18***@ya.ru</p>
+                <p class="winner-card__prize">Приз: Аэрогриль Kitfort</p>
+              </div>
+            </article>
+
+            <article class="winner-card" data-winner-row data-name="евгений мироненко">
+              <img class="winner-card__avatar" data-random-avatar alt="Аватар призёра Евгений Мироненко" width="56" height="56" loading="lazy" decoding="async">
+              <div class="winner-card__body">
+                <span class="winner-card__badge">Победитель 07</span>
+                <h3>Евгений Мироненко</h3>
+                <p class="winner-card__email">zhm***@mail.ru</p>
+                <p class="winner-card__prize">Приз: Автомобильный холодильник Kitfort</p>
+              </div>
+            </article>
+          </div>
+
+          <p class="winners-empty is-hidden" id="winners-empty">По вашему запросу ничего не найдено.</p>
+          <button class="btn btn-secondary winners-more is-hidden" type="button" id="winners-more" data-reveal>
+            Показать ещё
+          </button>
+        </div>
+      </section>
       <section class="section section--alt" id="tires">
         <div class="container">
           <div class="section-head" data-reveal>
@@ -787,139 +877,6 @@
         </div>
       </section>
 
-      <section class="section" id="winners" hidden>
-        <div class="container">
-          <div class="section-head" data-reveal>
-            <h2>Прошлые призёры</h2>
-            <p>Найдите себя в списке победителей.</p>
-          </div>
-
-          <div class="winners-controls" data-reveal>
-            <!-- <label for="winners-search">Поиск по имени</label> -->
-            <input id="winners-search" type="search" placeholder="Поиск по имени" autocomplete="off">
-          </div>
-
-          <div class="winners-grid" data-reveal>
-            <article class="winner-card" data-winner-row data-name="илья">
-              <img class="winner-card__avatar" data-random-avatar alt="Аватар призёра Илья" width="56" height="56" loading="lazy" decoding="async">
-              <div class="winner-card__body">
-                <h3>Илья</h3>
-                <p class="winner-card__email">lon***1@yandex.ru</p>
-                <p class="winner-card__prize">Утюг Kitfort KT-2603</p>
-              </div>
-            </article>
-            <article class="winner-card" data-winner-row data-name="юлия">
-              <img class="winner-card__avatar" data-random-avatar alt="Аватар призёра Юлия" width="56" height="56" loading="lazy" decoding="async">
-              <div class="winner-card__body">
-                <h3>Юлия</h3>
-                <p class="winner-card__email">mag***u@mail.ru</p>
-                <p class="winner-card__prize">Утюг Kitfort KT-2603</p>
-              </div>
-            </article>
-            <article class="winner-card" data-winner-row data-name="николай">
-              <img class="winner-card__avatar" data-random-avatar alt="Аватар призёра Николай" width="56" height="56" loading="lazy" decoding="async">
-              <div class="winner-card__body">
-                <h3>Николай</h3>
-                <p class="winner-card__email">a.k***v@mrkcpq.bizml.ru</p>
-                <p class="winner-card__prize">70mai Vacuum Cleaner Swift Midrive PV01</p>
-              </div>
-            </article>
-            <article class="winner-card" data-winner-row data-name="игорь">
-              <img class="winner-card__avatar" data-random-avatar alt="Аватар призёра Игорь" width="56" height="56" loading="lazy" decoding="async">
-              <div class="winner-card__body">
-                <h3>Игорь</h3>
-                <p class="winner-card__email">par***v@gmail.com</p>
-                <p class="winner-card__prize">Толщиномер CARSYS</p>
-              </div>
-            </article>
-            <article class="winner-card" data-winner-row data-name="анна">
-              <img class="winner-card__avatar" data-random-avatar alt="Аватар призёра Анна" width="56" height="56" loading="lazy" decoding="async">
-              <div class="winner-card__body">
-                <h3>Анна</h3>
-                <p class="winner-card__email">ann***a@mail.ru</p>
-                <p class="winner-card__prize">Утюг Kitfort KT-2603</p>
-              </div>
-            </article>
-            <article class="winner-card" data-winner-row data-name="дмитрий">
-              <img class="winner-card__avatar" data-random-avatar alt="Аватар призёра Дмитрий" width="56" height="56" loading="lazy" decoding="async">
-              <div class="winner-card__body">
-                <h3>Дмитрий</h3>
-                <p class="winner-card__email">dim***y@bk.ru</p>
-                <p class="winner-card__prize">Толщиномер CARSYS</p>
-              </div>
-            </article>
-            <article class="winner-card" data-winner-row data-name="марина">
-              <img class="winner-card__avatar" data-random-avatar alt="Аватар призёра Марина" width="56" height="56" loading="lazy" decoding="async">
-              <div class="winner-card__body">
-                <h3>Марина</h3>
-                <p class="winner-card__email">mar***a@list.ru</p>
-                <p class="winner-card__prize">70mai Vacuum Cleaner Swift Midrive PV01</p>
-              </div>
-            </article>
-            <article class="winner-card" data-winner-row data-name="сергей">
-              <img class="winner-card__avatar" data-random-avatar alt="Аватар призёра Сергей" width="56" height="56" loading="lazy" decoding="async">
-              <div class="winner-card__body">
-                <h3>Сергей</h3>
-                <p class="winner-card__email">ser***y@inbox.ru</p>
-                <p class="winner-card__prize">Утюг Kitfort KT-2603</p>
-              </div>
-            </article>
-            <article class="winner-card" data-winner-row data-name="оксана">
-              <img class="winner-card__avatar" data-random-avatar alt="Аватар призёра Оксана" width="56" height="56" loading="lazy" decoding="async">
-              <div class="winner-card__body">
-                <h3>Оксана</h3>
-                <p class="winner-card__email">oks***a@mail.ru</p>
-                <p class="winner-card__prize">Толщиномер CARSYS</p>
-              </div>
-            </article>
-            <article class="winner-card" data-winner-row data-name="павел">
-              <img class="winner-card__avatar" data-random-avatar alt="Аватар призёра Павел" width="56" height="56" loading="lazy" decoding="async">
-              <div class="winner-card__body">
-                <h3>Павел</h3>
-                <p class="winner-card__email">pav***l@yandex.ru</p>
-                <p class="winner-card__prize">70mai Vacuum Cleaner Swift Midrive PV01</p>
-              </div>
-            </article>
-            <article class="winner-card" data-winner-row data-name="роман">
-              <img class="winner-card__avatar" data-random-avatar alt="Аватар призёра Роман" width="56" height="56" loading="lazy" decoding="async">
-              <div class="winner-card__body">
-                <h3>Роман</h3>
-                <p class="winner-card__email">rom***n@gmail.com</p>
-                <p class="winner-card__prize">Утюг Kitfort KT-2603</p>
-              </div>
-            </article>
-            <article class="winner-card" data-winner-row data-name="лидия">
-              <img class="winner-card__avatar" data-random-avatar alt="Аватар призёра Лидия" width="56" height="56" loading="lazy" decoding="async">
-              <div class="winner-card__body">
-                <h3>Лидия</h3>
-                <p class="winner-card__email">lid***a@mail.ru</p>
-                <p class="winner-card__prize">Толщиномер CARSYS</p>
-              </div>
-            </article>
-            <article class="winner-card" data-winner-row data-name="алексей">
-              <img class="winner-card__avatar" data-random-avatar alt="Аватар призёра Алексей" width="56" height="56" loading="lazy" decoding="async">
-              <div class="winner-card__body">
-                <h3>Алексей</h3>
-                <p class="winner-card__email">ale***y@bk.ru</p>
-                <p class="winner-card__prize">70mai Vacuum Cleaner Swift Midrive PV01</p>
-              </div>
-            </article>
-            <article class="winner-card" data-winner-row data-name="елена">
-              <img class="winner-card__avatar" data-random-avatar alt="Аватар призёра Елена" width="56" height="56" loading="lazy" decoding="async">
-              <div class="winner-card__body">
-                <h3>Елена</h3>
-                <p class="winner-card__email">ele***a@inbox.ru</p>
-                <p class="winner-card__prize">Утюг Kitfort KT-2603</p>
-              </div>
-            </article>
-          </div>
-
-          <p class="winners-empty is-hidden" id="winners-empty">По вашему запросу ничего не найдено.</p>
-          <button class="btn btn-secondary winners-more" type="button" id="winners-more" data-reveal>
-            Показать ещё
-          </button>
-        </div>
-      </section>
       <section class="section section--alt" id="faq">
         <div class="container">
           <div class="section-head" data-reveal>

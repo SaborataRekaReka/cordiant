@@ -4,7 +4,7 @@
   const prefersReducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
   const prefersReducedMotion = () => prefersReducedMotionQuery.matches;
 
-  const sectionsForSpy = ["how", "quiz", "prizes", "tires", "winners", "faq"];
+  const sectionsForSpy = ["how", "quiz", "prizes", "tires", "faq"];
   const header = document.querySelector("[data-header]");
   const heroIntro = document.querySelector(".hero--immersive");
 
